@@ -1,8 +1,7 @@
 fn main() {
     let r = rlex_gen::rlex::Rlex {};
     r.lex(
-        r#"
-        -- This is a comment
+        r#"-- This is a comment
 class Main {
     -- Define some variables
     let x : Int <- 42;
