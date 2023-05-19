@@ -1,39 +1,38 @@
+use rlex_gen::rparser::{RParser, Token};
+
+#[derive(Clone)]
+struct MyToken {
+    symbol_type: String,
+    data: String,
+}
+
+impl MyToken {
+    pub fn build(symbol_type: String, data: String) -> Self {
+        MyToken { symbol_type, data }
+    }
+}
+
+impl Token for MyToken {
+    fn to_tree_node(&self) -> rlex_gen::rparser::ParsingTreeNode {
+        rlex_gen::rparser::ParsingTreeNode::build(
+            self.symbol_type.clone(),
+            self.data.clone(),
+            vec![],
+        )
+    }
+}
+
 fn main() {
-    let r = rlex_gen::rlex::Rlex {};
-    r.lex(
-        r#"-- This is a comment
-class Main {
-    -- Define some variables
-    let x : Int <- 42;
-    let y : String <- "Hello, world!";
+    println!("Hello, world!");
 
-    -- Print a message
-    if x > 0 then
-        println(y);
-    else
-        println("Error!");
-    fi
+    let parser = RParser::new();
+    let input = Vec::from([
+        MyToken::build("int".into(), "123".into()),
+        MyToken::build("*".into(), "*".into()),
+        MyToken::build("int".into(), "234".into()),
+        MyToken::build(RParser::END_SYMBOL.into(), "".into()),
+    ]);
+    let res = parser.parse(input).unwrap();
 
-    -- Loop through some numbers
-    let i : Int <- 0;
-    while i < 10 loop
-        println("i = " + i);
-        i <- i + 1;
-    pool
-
-    -- Define a function
-    def fibonacci(n : Int) : Int {
-        if n <= 1 then
-            return n;
-        else
-            return fibonacci(n-1) + fibonacci(n-2);
-        fi
-    };
-
-    (* Call the function *) 
-    let result : Int <- fibonacci(10);
-    println("Fibonacci(10) = " + result);
-};
-     "#,
-    );
+    println!("{}", res.data);
 }
