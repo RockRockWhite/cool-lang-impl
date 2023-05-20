@@ -35,4 +35,15 @@ fn main() {
     let res = parser.parse(input).unwrap();
 
     println!("{}", res.data);
+    dfs(&res, 0);
+}
+
+fn dfs(node: &rlex_gen::rparser::ParsingTreeNode, depth: usize) {
+    for _ in 0..depth {
+        print!("  ");
+    }
+    println!("{}: {}", node.symbol_type, node.data);
+    for child in &node.children {
+        dfs(child, depth + 1);
+    }
 }
